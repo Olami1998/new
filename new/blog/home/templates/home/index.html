@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Lekzy Blaz | Home</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="{% static 'home/css/styley.css' %}" rel="stylesheet" type="text/css"  media="all" />
+</head>
+<body>
+<div class="wrap">
+	<div class="header">
+    	<div class="logo"><a href="{% url 'home:home' %}"><img src="{% static 'home/images/logo1.png' %}" title="Corporate Site" alt="Corporate Site" width="204" height="57" border="0"/></a></div>
+        <div class="nav">
+            <ul>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'home:home' %}">Home</a></li>
+                <li><a href="{% url 'home:new_post' %}">Add new entry</a></li>
+                <li><a href="{% url 'accounts:logout' %}">LogOut</a></li>
+                <li><a href="">Welcome, {{ user.username }}</a></li>
+                
+                {% else %}
+                <li><a href="{% url 'home:home' %}">Home</a></li>
+                
+                <li><a href="{% url 'accounts:register' %}">Register</a></li>
+                <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    {% for topic in page_obj %}
+    <div class="content">
+    	<h1>{{ topic.title }}</h1>
+        
+        <p>{{ topic.content|slice:":200" }}</p>
+        <div class="pic"><a href="about.html"><img src="{% static 'home/images/img.jpg' %}" ></a></div>
+       
+    <p class="card-text text-muted h6">{{ topic.author }} | {{ topic.created_on }} </p>
+    </div>
+    <li><a class="readmore" href="{% url 'home:detail' topic.slug %}">ReadMore</a></li>
+    {% endfor %}
+
+    
+
+    <div class="sidebar">
+    	<h2>Recent Ideas</h2>
+        <ul>
+          <li><a href="#">Lorem ipsum dolor sit consectetur adip</a></li>
+          <li><a href="#">Lorem ipsum dolor sit consectetur adip</a></li>
+          <li><a href="#">Lorem ipsum dolor sit consectetur adip</a></li>
+          <li><a href="#">Lorem ipsum dolor sit consectetur adip</a></li>
+          <li><a href="#">Lorem ipsum dolor sit consectetur adip</a></li>
+          <li><a href="#">Lorem ipsum dolor sit consectetur adip</a></li>
+          <li><a href="#">Lorem ipsum dolor sit consectetur adip</a></li>
+        </ul>
+    </div>
+    <div class="clear">
+        <div class="pagination">
+            <span class="step-links">
+            <nav aria-label="Page navigation conatiner"></nav>
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                   <li><a href="?page=1">&laquo; first</a></li>
+                    <li><a href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                {% endif %}
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">next</a></li>
+                    <li><a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                    {% endif %}
+        </div> 
+    </div>
+</div> 
+<div class="footer">
+    <div class="wrap">
+        <div class="fmenu">
+            <ul>
+              <li><a href="{% url 'home:home' %}">Home </a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="contact.html">contact me</a></li>
+            </ul>
+    </div>
+        <div class="copy">&copy; 2023 Blaz. All Rights Reserved | Design by <a href="http://olam-i.com.ng">Olami</a></div>
+        <div class="clear"></div>
+    </div>
+</div>
+</body>
+</html>

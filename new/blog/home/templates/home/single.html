@@ -1,0 +1,89 @@
+{% load static %}
+
+<div class="content">
+    <div class="grids">
+        <div class="grid box">
+            <div class="grid-header">
+            <h3>Title: {{ post }}</h3>
+            <ul>
+                <li><span>Post By {{ post.author }} on {{ post.created_on|date:'M d, Y H:i' }}</span></li>
+                <p>{{ post.content|linebreaks }}</p>
+            </ul>
+            </div>
+            {% for img in images.url %}
+                <a href="#"><img src="{{ post.images.url }}" /></a>
+                
+
+                <style>
+                    img {
+                        height: 200px;
+                        width: 200px;
+                    }
+            
+                    
+                    .img {
+                        display: flex;
+                        height: 20rem;
+                        gap: 1rem
+                    }
+            
+                    .img {
+                        flex: 1;
+                        border-radius: 1rem;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: auto 100%;
+                        transition: all .8s cubic-bezier(.25, .4, .45, 1.4);
+                    }
+            
+                    .img:hover {
+                        flex: 5;
+                    }
+                </style>
+                
+            {% empty %}{% endfor %}
+            <ul>
+                <li><a class="readmore" href="{% url 'home:edit_post' post.id %}">EditPost</a></li>
+            </ul>
+
+            <div class="clear"> </div>
+            </div>
+        </div><div class="col-md-8 card mb-4  mt-3 ">
+            <div class="card-body">
+                <!-- comments -->
+                {% with comments.count as total_comments %}
+                    <h2>{{ total_comments }} comments</h2>
+
+                    <p>
+                {% endwith %} {% for comment in comments %}
+                    </p>
+
+                    <div class="comments" style="padding: 10px;">
+                        <p class="font-weight-bold">
+                            {{ comment.name }}
+                            <span class=" text-muted font-weight-normal">
+                                {{ comment.created_on }}
+                            </span>
+                        </p>
+                        {{ comment.body | linebreaks }}
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-8 card mb-4  mt-3 ">
+            <div class="card-body">
+                {% if new_comment %}
+                    <div class="alert alert-success" role="alert">
+                        Your comment is awaiting moderation
+                    </div>
+                {% else %}
+                    <h3>Leave a comment</h3>
+                    <form method="post" style="margin-top: 1.3em;">
+                        {{ comment_form }}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
